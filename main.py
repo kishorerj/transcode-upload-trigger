@@ -26,7 +26,10 @@ def hello_gcs(event, context):
     template_id = os.environ.get('TRANSCODE_TEMPLATE')
     if template_id is None:
          print("ERROR templateid is null")
+    out_bucket = os.environ.get('OUTPUT_BUCKET')
+    if out_bucket is None:
+         print("ERROR output bucket is null") 
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(projectId, topicId)
-    publisher.publish(topic_path, (event['bucket']+","+ event['name']+ ","+ template_id).encode("utf-8"))
+    publisher.publish(topic_path, (event['bucket']+","+ event['name']+ ","+ template_id+ ","+ out_bucket).encode("utf-8"))
     return 'OK'
